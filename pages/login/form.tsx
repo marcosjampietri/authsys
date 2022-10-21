@@ -30,12 +30,15 @@ const FormComponent = ({ reg }: any) => {
   const { userLoading, errorMsg } = useTypedSelector(selectUsers);
 
   useEffect(() => {
-    if (!userLoading && complete) router.push("/protected");
+    if (!userLoading && complete) {
+      router.push("/");
+      router.reload();
+    }
   }, [userLoading, complete]);
 
   useEffect(() => {
-    if (errorMsg) setcomplete(false);
-  }, [errorMsg]);
+    if (!userLoading) setcomplete(false);
+  }, [userLoading, complete]);
 
   const validationSchema = Yup.object().shape({
     name: Yup.string().required("Name is required, Mr. X 🤪"),
