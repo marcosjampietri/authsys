@@ -13,6 +13,7 @@ import { AppDispatch } from "../../store/index";
 import { useTypedSelector } from "../../store/index";
 import { useRouter } from "next/router";
 import { useEffect, useState } from "react";
+import Loader from "../../components/Loader";
 
 type Inputs = {
   name: string;
@@ -126,6 +127,11 @@ const FormComponent = ({ reg }: any) => {
 
   return (
     <>
+      {complete && (!errorMsg || userLoading) ? (
+        <WrapLoader>
+          <Loader size={150} />
+        </WrapLoader>
+      ) : null}
       <Form
         noValidate
         onSubmit={handleSubmit(reg ? submitHandler : submitHandlerLogin)}
@@ -314,4 +320,28 @@ const SubmitWrap = styled.div`
 
 const ErrorWrap = styled(animated.div)`
   position: relative;
+`;
+
+const WrapForm = styled.div`
+  position: relative;
+  width: 100%;
+
+  display: flex;
+  justify-content: center;
+
+  .ll {
+    position: absolute;
+    left: 0px;
+    width: 100%;
+  }
+`;
+const WrapLoader = styled(WrapForm)`
+  position: fixed;
+  top: 0px;
+  align-items: center;
+  width: 100vw;
+  height: 100vh;
+  background: hsla(0, 0%, 100%, 0.5);
+  backdrop-filter: blur(2px);
+  z-index: 2;
 `;

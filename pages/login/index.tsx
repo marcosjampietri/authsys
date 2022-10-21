@@ -5,6 +5,7 @@ import dynamic from "next/dynamic";
 const Form = dynamic(() => import("./form"), {
   suspense: true,
 });
+
 import { resetError } from "../../store/usersSlice";
 
 const Auth = () => {

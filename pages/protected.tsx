@@ -8,6 +8,8 @@ import styled from "styled-components";
 import { AppDispatch, useTypedSelector } from "../store";
 import { logoutUser, selectUsers } from "../store/usersSlice";
 
+import Loader from "../components/Loader";
+
 const Home: NextPage = () => {
   const dispatch: AppDispatch = useDispatch();
   const router = useRouter();
@@ -36,6 +38,11 @@ const Home: NextPage = () => {
       </Head>
 
       <main>
+        {complete && !errorMsg ? (
+          <WrapLoader>
+            <Loader size={150} />
+          </WrapLoader>
+        ) : null}
         <h1>Protected</h1>
         <Link href="/">
           <a>Home</a>
@@ -58,3 +65,26 @@ const Div = styled.div`
 function useRopute() {
   throw new Error("Function not implemented.");
 }
+
+const WrapForm = styled.div`
+  position: relative;
+  width: 100%;
+
+  display: flex;
+  justify-content: center;
+
+  .ll {
+    position: absolute;
+    left: 0px;
+    width: 100%;
+  }
+`;
+const WrapLoader = styled(WrapForm)`
+  position: fixed;
+  top: 0px;
+  align-items: center;
+  width: 100vw;
+  height: 100vh;
+  background: hsla(0, 0%, 100%, 0.5);
+  backdrop-filter: blur(2px);
+`;
