@@ -31,14 +31,17 @@ const FormComponent = ({ reg }: any) => {
 
   useEffect(() => {
     if (!userLoading && complete) {
-      router.push("/");
-      router.reload();
+      if (!errorMsg) {
+        // router.push("/");
+        router.reload();
+      } else setcomplete(false);
     }
-  }, [userLoading, complete]);
+  }, [userLoading]);
 
   useEffect(() => {
-    if (!userLoading) setcomplete(false);
-  }, [userLoading, complete]);
+    const change = !userLoading && complete && !errorMsg;
+    console.log(change);
+  }, [userLoading, errorMsg, complete]);
 
   const validationSchema = Yup.object().shape({
     name: Yup.string().required("Name is required, Mr. X 🤪"),
@@ -85,7 +88,7 @@ const FormComponent = ({ reg }: any) => {
     try {
       const { name, email, password } = userData;
       dispatch(registerUser({ name, email, password }));
-      setcomplete(true);
+      // setcomplete(true);
     } catch (err) {
       alert("something wrong is not right");
     }
