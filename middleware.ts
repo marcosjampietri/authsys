@@ -3,13 +3,16 @@ import { Secret } from "jsonwebtoken";
 import { jwtVerify } from "jose";
 
 export async function middleware(req: NextRequest) {
-  const secret = process.env.JWT_TOKEN_SECRET;
+  // const secret = process.env.JWT_TOKEN_SECRET;
   const daCookie = req.cookies.get("myTokenName");
 
   if (req.nextUrl.pathname.startsWith("/login")) {
     if (daCookie) {
       try {
-        await jwtVerify(daCookie, new TextEncoder().encode(secret));
+        await jwtVerify(
+          daCookie,
+          new TextEncoder().encode(process.env.JWT_TOKEN_SECRET)
+        );
         return NextResponse.redirect(new URL("/protected", req.url));
       } catch (error) {
         return NextResponse.next();
@@ -22,7 +25,7 @@ export async function middleware(req: NextRequest) {
     try {
       const { payload } = await jwtVerify(
         daCookie,
-        new TextEncoder().encode(secret)
+        new TextEncoder().encode(process.env.JWT_TOKEN_SECRET)
       );
       // console.log({ payload });
       return NextResponse.next();

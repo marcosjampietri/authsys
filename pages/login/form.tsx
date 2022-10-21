@@ -35,6 +35,10 @@ const FormComponent = ({ reg }: any) => {
     if (!userLoading && complete) router.push("/protected");
   }, [userLoading, complete]);
 
+  useEffect(() => {
+    if (errorMsg) setcomplete(false);
+  }, []);
+
   const validationSchema = Yup.object().shape({
     name: Yup.string().required("Name is required, Mr. X 🤪"),
     email: Yup.string()
