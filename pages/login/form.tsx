@@ -25,8 +25,6 @@ type Inputs = {
 const FormComponent = ({ reg }: any) => {
   const dispatch: AppDispatch = useDispatch();
   const router = useRouter();
-
-  // const {} = useTypedSelector(selectUsers);
   const [complete, setcomplete] = useState(false);
 
   const { userLoading, errorMsg } = useTypedSelector(selectUsers);
@@ -37,7 +35,7 @@ const FormComponent = ({ reg }: any) => {
 
   useEffect(() => {
     if (errorMsg) setcomplete(false);
-  }, []);
+  }, [errorMsg]);
 
   const validationSchema = Yup.object().shape({
     name: Yup.string().required("Name is required, Mr. X 🤪"),

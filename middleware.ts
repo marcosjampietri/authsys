@@ -13,25 +13,33 @@ export async function middleware(req: NextRequest) {
           daCookie,
           new TextEncoder().encode(process.env.JWT_TOKEN_SECRET)
         );
+        console.log("has valid cookie and tried login");
         return NextResponse.redirect(new URL("/protected", req.url));
       } catch (error) {
+        console.log("has invalid cookie");
         return NextResponse.next();
       }
     } else {
+      console.log("doesnt have cookie");
       return NextResponse.next();
     }
   } else {
-    if (!daCookie) return NextResponse.redirect(new URL("/login", req.url));
-    try {
-      const { payload } = await jwtVerify(
-        daCookie,
-        new TextEncoder().encode(process.env.JWT_TOKEN_SECRET)
-      );
-      // console.log({ payload });
-      return NextResponse.next();
-    } catch (error) {
-      // console.log("deu merda");
+    if (!daCookie) {
+      console.log("doesnt have cookie and tried protected page");
       return NextResponse.redirect(new URL("/login", req.url));
+    } else {
+      try {
+        const { payload } = await jwtVerify(
+          daCookie,
+
+          new TextEncoder().encode(process.env.JWT_TOKEN_SECRET)
+        );
+        console.log("has valid cookie and access");
+        return NextResponse.next();
+      } catch (error) {
+        console.log("has invalid cookie and tried protected page");
+        return NextResponse.redirect(new URL("/login", req.url));
+      }
     }
   }
 }
