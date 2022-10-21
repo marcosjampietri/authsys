@@ -2,9 +2,8 @@ import { NextRequest, NextResponse } from "next/server";
 import { Secret } from "jsonwebtoken";
 import { jwtVerify } from "jose";
 
-const secret = <string>process.env["JWT_TOKEN_SECRET"];
-
 export async function middleware(req: NextRequest) {
+  const secret = process.env.JWT_TOKEN_SECRET;
   const daCookie = req.cookies.get("myTokenName");
 
   if (req.nextUrl.pathname.startsWith("/login")) {
