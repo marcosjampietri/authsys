@@ -69,6 +69,20 @@ export const loginUser = createAsyncThunk(
     }
   }
 );
+export const logoutUser = createAsyncThunk(
+  "users/logoutUser",
+  async (_, { rejectWithValue }) => {
+    try {
+      const logRes = await axios.get("/api/auth/logout");
+      console.log(logRes);
+      return logRes;
+    } catch (err: any) {
+      // Use `err.response.data` as `action.payload` for a `rejected` action,
+      // by explicitly returning it using the `rejectWithValue()` utility
+      return rejectWithValue(err.response.data);
+    }
+  }
+);
 
 interface addressArgsType {
   id?: string;
@@ -124,14 +138,6 @@ export const usersSlice = createSlice({
     setActiveAddress(state, { payload }) {
       state.activeAddress = payload;
     },
-    logOut(state) {
-      (state.token = ""),
-        (state.userLoading = false),
-        (state.userInfo = null),
-        (state.profile = null),
-        (state.errorMsg = ""),
-        (state.activeAddress = 0);
-    },
   },
   extraReducers: (builder) => {
     builder.addCase(registerUser.pending, (state) => {
@@ -167,7 +173,6 @@ export const usersSlice = createSlice({
     builder.addCase(loginUser.fulfilled, (state, { payload }) => {
       return {
         ...state,
-        isAuthenticated: true,
         userLoading: false,
         userInfo: payload.data,
         // token: payload.data.token,
@@ -177,10 +182,32 @@ export const usersSlice = createSlice({
     builder.addCase(loginUser.rejected, (state, action) => {
       return {
         ...state,
-        isAuthenticated: false,
         userLoading: false,
         // userInfo: payload.data,
         // token: payload.data.token,
+        errorMsg: action.payload,
+      };
+    });
+    builder.addCase(logoutUser.pending, (state) => {
+      return {
+        ...state,
+        userLoading: true,
+      };
+    });
+    builder.addCase(logoutUser.fulfilled, (state, { payload }) => {
+      return {
+        ...state,
+        userLoading: false,
+        userInfo: null,
+        profile: null,
+        errorMsg: "",
+        activeAddress: 0,
+      };
+    });
+    builder.addCase(logoutUser.rejected, (state, action) => {
+      return {
+        ...state,
+        userLoading: false,
         errorMsg: action.payload,
       };
     });
@@ -234,6 +261,6 @@ export const usersSlice = createSlice({
   },
 });
 
-export const { resetError, setActiveAddress, logOut } = usersSlice.actions;
+export const { resetError, setActiveAddress } = usersSlice.actions;
 export const selectUsers = (state: AppState) => <UserState>state.users;
 export default usersSlice.reducer;

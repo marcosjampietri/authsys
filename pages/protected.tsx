@@ -1,8 +1,32 @@
 import type { NextPage } from "next";
 import Head from "next/head";
 import Link from "next/link";
+import { useRouter } from "next/router";
+import { useEffect, useState } from "react";
+import { useDispatch } from "react-redux";
+import styled from "styled-components";
+import { AppDispatch, useTypedSelector } from "../store";
+import { logoutUser, selectUsers } from "../store/usersSlice";
 
 const Home: NextPage = () => {
+  const dispatch: AppDispatch = useDispatch();
+  const router = useRouter();
+  const [complete, setcomplete] = useState(false);
+  const { userLoading, errorMsg } = useTypedSelector(selectUsers);
+
+  const onLogout = () => {
+    dispatch(logoutUser());
+    setcomplete(true);
+  };
+
+  useEffect(() => {
+    if (!userLoading && complete) {
+      if (!errorMsg) {
+        router.reload();
+      } else setcomplete(false);
+    }
+  }, [userLoading]);
+
   return (
     <div>
       <Head>
@@ -19,9 +43,18 @@ const Home: NextPage = () => {
         <Link href="/login">
           <a>Login</a>
         </Link>
+
+        <Div onClick={onLogout}>Logout</Div>
       </main>
     </div>
   );
 };
 
 export default Home;
+
+const Div = styled.div`
+  cursor: pointer;
+`;
+function useRopute() {
+  throw new Error("Function not implemented.");
+}
