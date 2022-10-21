@@ -27,7 +27,7 @@ const Home: NextPage = () => {
         router.reload();
       } else setcomplete(false);
     }
-  }, [userLoading]);
+  }, [userLoading, complete, errorMsg]);
 
   return (
     <div>

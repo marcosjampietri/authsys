@@ -37,7 +37,7 @@ const FormComponent = ({ reg }: any) => {
         router.reload();
       } else setcomplete(false);
     }
-  }, [userLoading]);
+  }, [userLoading, complete, errorMsg]);
 
   useEffect(() => {
     const change = !userLoading && complete && !errorMsg;
