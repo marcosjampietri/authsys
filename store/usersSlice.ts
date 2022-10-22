@@ -37,7 +37,7 @@ export const registerUser = createAsyncThunk(
         email,
         password,
       });
-      await axios.post("/api/auth/signin/email");
+      // await axios.post("/api/auth/signin/email");
       let options = { redirect: false, email, password };
       // await signIn('credentials', options)
       return resReg;
@@ -73,7 +73,7 @@ export const logoutUser = createAsyncThunk(
   "users/logoutUser",
   async (_, { rejectWithValue }) => {
     try {
-      const logRes = await axios.get("/api/auth/logout");
+      const logRes = await axios.post("/api/auth/logout");
       console.log(logRes);
       return logRes;
     } catch (err: any) {
