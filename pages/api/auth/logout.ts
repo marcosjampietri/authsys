@@ -6,7 +6,7 @@ export default function logout(req: NextApiRequest, res: NextApiResponse) {
   const serialized = serialize("myTokenName", "", {
     httpOnly: true,
     secure: process.env.NODE_ENV === "production",
-    sameSite: "strict",
+    sameSite: "none",
     maxAge: 0,
     path: "/",
   });

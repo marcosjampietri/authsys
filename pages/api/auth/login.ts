@@ -31,7 +31,7 @@ export default async function login(req: NextApiRequest, res: NextApiResponse) {
     const serialized = serialize("myTokenName", token, {
       httpOnly: true,
       secure: process.env.NODE_ENV === "production",
-      sameSite: "strict",
+      sameSite: "none",
       maxAge: 60 * 60 * 24 * 1,
       path: "/",
     });
