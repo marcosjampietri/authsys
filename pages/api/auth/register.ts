@@ -5,6 +5,7 @@ import jwt, { Secret } from "jsonwebtoken";
 import user from "../../../server/models/userModel";
 import { connectToMongo } from "../../../server/index";
 import { serialize } from "cookie";
+import { userInfoType } from "../../../types";
 
 export default async function register(
   req: NextApiRequest,
@@ -38,22 +39,19 @@ export default async function register(
       // expiresIn: 10,
     });
 
-    const serialized = serialize("myTokenName", token, {
+    const serialized = serialize("loginToken", token, {
       httpOnly: true,
       secure: process.env.NODE_ENV === "production",
-      sameSite: "none",
+      sameSite: "strict",
       maxAge: 60 * 60 * 24 * 1,
       path: "/",
     });
 
     res.setHeader("Set-Cookie", serialized).send({
-      token,
       _id: savedUser._id,
       name: savedUser.name,
       email: savedUser.email,
-      isAdmin: savedUser.isAdmin,
       address: savedUser.address,
-      orders: savedUser.orders,
     });
   } catch (err) {
     console.log(err);

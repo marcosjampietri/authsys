@@ -89,7 +89,7 @@ const FormComponent = ({ reg }: any) => {
     try {
       const { name, email, password } = userData;
       dispatch(registerUser({ name, email, password }));
-      // setcomplete(true);
+      setcomplete(true);
     } catch (err) {
       alert("something wrong is not right");
     }

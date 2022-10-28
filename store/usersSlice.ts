@@ -1,21 +1,18 @@
 import { createSlice, createAsyncThunk } from "@reduxjs/toolkit";
 import { AppState } from "../store/index";
 import axios from "axios";
+import { userInfoType } from "../types";
 
 interface UserState {
-  token: string;
-
   userLoading: boolean;
-  userInfo: object | null;
+  userInfo: userInfoType | null;
   profile: object | null;
   errorMsg: any;
   activeAddress: any;
 }
 const initialState = {
-  token: "",
   userLoading: false,
   userInfo: null,
-  profile: null,
   errorMsg: "",
   activeAddress: 0,
 } as UserState;
@@ -38,8 +35,7 @@ export const registerUser = createAsyncThunk(
         password,
       });
       // await axios.post("/api/auth/signin/email");
-      let options = { redirect: false, email, password };
-      // await signIn('credentials', options)
+
       return resReg;
     } catch (err: any) {
       // Use `err.response.data` as `action.payload` for a `rejected` action,
@@ -59,8 +55,6 @@ export const loginUser = createAsyncThunk(
         password,
       });
       // await axios.post("/api/auth/signin/email");
-      let options = { redirect: false, email, password };
-      // await signIn('credentials', options)
       return logReg;
     } catch (err: any) {
       // Use `err.response.data` as `action.payload` for a `rejected` action,
@@ -69,12 +63,12 @@ export const loginUser = createAsyncThunk(
     }
   }
 );
+
 export const logoutUser = createAsyncThunk(
   "users/logoutUser",
   async (_, { rejectWithValue }) => {
     try {
       const logRes = await axios.post("/api/auth/logout");
-      console.log(logRes);
       return logRes;
     } catch (err: any) {
       // Use `err.response.data` as `action.payload` for a `rejected` action,
@@ -108,26 +102,6 @@ export const addAddress = createAsyncThunk(
   }
 );
 
-interface profileArgsType {
-  id: string;
-}
-
-export const getProfile = createAsyncThunk(
-  "users/getProfile",
-  async (userArgs: profileArgsType, { rejectWithValue }) => {
-    try {
-      const profileRes = await axios.post("/api/users/profile", {
-        id: userArgs,
-      });
-      return profileRes;
-    } catch (err: any) {
-      // Use `err.response.data` as `action.payload` for a `rejected` action,
-      // by explicitly returning it using the `rejectWithValue()` utility
-      return rejectWithValue(err.response.data);
-    }
-  }
-);
-
 export const usersSlice = createSlice({
   name: "users",
   initialState,
@@ -151,7 +125,6 @@ export const usersSlice = createSlice({
         ...state,
         userLoading: false,
         userInfo: payload.data,
-        // token: payload.data.token,
         errorMsg: "",
       };
     });
@@ -160,7 +133,6 @@ export const usersSlice = createSlice({
         ...state,
         userLoading: false,
         // userInfo: payload.data,
-        // token: payload.data.token,
         errorMsg: action.payload,
       };
     });
@@ -175,7 +147,6 @@ export const usersSlice = createSlice({
         ...state,
         userLoading: false,
         userInfo: payload.data,
-        // token: payload.data.token,
         errorMsg: "",
       };
     });
@@ -184,7 +155,6 @@ export const usersSlice = createSlice({
         ...state,
         userLoading: false,
         // userInfo: payload.data,
-        // token: payload.data.token,
         errorMsg: action.payload,
       };
     });
@@ -199,7 +169,6 @@ export const usersSlice = createSlice({
         ...state,
         userLoading: false,
         userInfo: null,
-        profile: null,
         errorMsg: "",
         activeAddress: 0,
       };
@@ -220,41 +189,16 @@ export const usersSlice = createSlice({
     builder.addCase(addAddress.fulfilled, (state, { payload }) => {
       return {
         ...state,
-
         userLoading: false,
         userInfo: payload.data,
-        // token: payload.data.token,
         errorMsg: "",
       };
     });
     builder.addCase(addAddress.rejected, (state, action) => {
       return {
         ...state,
-
         userLoading: false,
         // userInfo: payload.data,
-        // token: payload.data.token,
-        errorMsg: action.payload,
-      };
-    });
-    builder.addCase(getProfile.pending, (state) => {
-      return {
-        ...state,
-        userLoading: true,
-      };
-    });
-    builder.addCase(getProfile.fulfilled, (state, { payload }) => {
-      return {
-        ...state,
-        userLoading: false,
-        profile: payload.data,
-        errorMsg: "",
-      };
-    });
-    builder.addCase(getProfile.rejected, (state, action) => {
-      return {
-        ...state,
-        userLoading: false,
         errorMsg: action.payload,
       };
     });

@@ -13,12 +13,8 @@ const Home: NextPage = () => {
 
       <main>
         <h1>HOME</h1>
-        <Link href="/protected">
-          <a>Protected</a>
-        </Link>
-        <Link href="/login">
-          <a>Login</a>
-        </Link>
+        <Link href="/protected">Protected</Link>
+        <Link href="/login">Login</Link>
       </main>
     </div>
   );

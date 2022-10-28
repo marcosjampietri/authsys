@@ -5,6 +5,12 @@ import { Provider, useDispatch } from "react-redux";
 import { useRouter } from "next/router";
 import { Transition, animated, config } from "react-spring";
 import styled from "styled-components";
+import { loadStripe } from "@stripe/stripe-js";
+import { Elements } from "@stripe/react-stripe-js";
+
+const stripePromise = loadStripe(
+  "pk_test_51JP5tCEV3aJ0axV3AgECWzYOvcF1T8X4j8FRt6nYeLwwoxgfc9bvRfgATmBu6U0k1XYStmZ43soklcbdGy0LBgD300G4pdBwfD"
+);
 
 function MyApp({ Component, pageProps, router, ...rest }: AppProps) {
   const { store, props } = wrapper.useWrappedStore(rest);
@@ -12,7 +18,13 @@ function MyApp({ Component, pageProps, router, ...rest }: AppProps) {
   return (
     <>
       <Provider store={store}>
-        <AppChild Component={Component} pageProps={pageProps} router={router} />
+        <Elements stripe={stripePromise}>
+          <AppChild
+            Component={Component}
+            pageProps={pageProps}
+            router={router}
+          />
+        </Elements>
       </Provider>
     </>
   );

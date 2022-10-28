@@ -5,16 +5,19 @@ import { useRouter } from "next/router";
 import { useEffect, useState } from "react";
 import { useDispatch } from "react-redux";
 import styled from "styled-components";
-import { AppDispatch, useTypedSelector } from "../store";
-import { logoutUser, selectUsers } from "../store/usersSlice";
+import { AppDispatch, useTypedSelector } from "../../store";
+import { logoutUser, selectUsers } from "../../store/usersSlice";
+import cookie from "cookie";
 
-import Loader from "../components/Loader";
+import Loader from "../../components/Loader";
+import axios from "axios";
+import { productsList } from "../../server/products";
 
 const Home: NextPage = () => {
   const dispatch: AppDispatch = useDispatch();
   const router = useRouter();
   const [complete, setcomplete] = useState(false);
-  const { userLoading, errorMsg } = useTypedSelector(selectUsers);
+  const { userLoading, errorMsg, userInfo } = useTypedSelector(selectUsers);
 
   const onLogout = () => {
     dispatch(logoutUser());
@@ -28,6 +31,14 @@ const Home: NextPage = () => {
       } else setcomplete(false);
     }
   }, [userLoading, complete, errorMsg]);
+
+  const payauth = async () => {
+    userInfo && (await axios.post("/api/auth/payauth", { _id: userInfo!._id }));
+  };
+
+  useEffect(() => {
+    userInfo ? payauth() : null;
+  }, [userInfo]);
 
   return (
     <div>
@@ -43,19 +54,38 @@ const Home: NextPage = () => {
             <Loader size={150} />
           </WrapLoader>
         ) : null}
-        <h1>Protected</h1>
+        <h1>PAID ROUTE</h1>
         <Link href="/">Home</Link>
         <Link href="/login">Login</Link>
-        <Link href="/payment">PAYMENT</Link>
-        <Link href="/paid">Paid Content</Link>
+        {productsList.map(({ id }) => (
+          <Link href={`/paid/product/${id}`}>{id}</Link>
+        ))}
 
         <Div onClick={onLogout}>Logout</Div>
+        <Div onClick={payauth}>PAYAUTH</Div>
       </main>
     </div>
   );
 };
 
 export default Home;
+
+export const getServerSideProps = async (context: any) => {
+  const mycookie = cookie.parse(
+    (context.req && context.req.headers.cookie) || ""
+  );
+
+  let cookieNameData = {};
+  if (mycookie.whatevercookienameis) {
+    cookieNameData = mycookie.whatevercookienameis;
+  }
+
+  return {
+    props: {
+      cookieNameData,
+    },
+  };
+};
 
 const Div = styled.div`
   cursor: pointer;

@@ -28,22 +28,19 @@ export default async function login(req: NextApiRequest, res: NextApiResponse) {
       expiresIn: 60 * 60 * 24 * 1,
     });
 
-    const serialized = serialize("myTokenName", token, {
+    const serialized = serialize("loginToken", token, {
       httpOnly: true,
       secure: process.env.NODE_ENV === "production",
-      sameSite: "none",
+      sameSite: "strict",
       maxAge: 60 * 60 * 24 * 1,
       path: "/",
     });
 
     res.setHeader("Set-Cookie", serialized).send({
-      token,
       _id: logUser._id,
       name: logUser.name,
       email: logUser.email,
-      isAdmin: logUser.isAdmin,
       address: logUser.address,
-      orders: logUser.orders,
     });
   } catch (err) {
     console.log(err);
