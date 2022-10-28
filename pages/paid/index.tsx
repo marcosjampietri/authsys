@@ -58,7 +58,9 @@ const Home: NextPage = () => {
         <Link href="/">Home</Link>
         <Link href="/login">Login</Link>
         {productsList.map(({ id }) => (
-          <Link href={`/paid/product/${id}`}>{id}</Link>
+          <Link key={id} href={`/paid/product/${id}`}>
+            {id}
+          </Link>
         ))}
 
         <Div onClick={onLogout}>Logout</Div>
