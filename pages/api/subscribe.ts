@@ -26,7 +26,7 @@ export default async function subscribe(
         .status(400)
         .json({ status: "error", message: "User doesnt exist" });
 
-    let customer = { id: "" };
+    let customer;
 
     if (!User.stripe.id) {
       // Create a customer in case it doesnt exist
@@ -79,6 +79,7 @@ export default async function subscribe(
     });
     // Send back the client secret for payment
     const invoice = subscription.latest_invoice as Stripe.Invoice;
+    console.log("INVOICE DO SUBSCRIBE", invoice);
     if (invoice.payment_intent) {
       const intent = invoice.payment_intent as Stripe.PaymentIntent;
       res.send({

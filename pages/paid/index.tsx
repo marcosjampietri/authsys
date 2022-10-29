@@ -7,10 +7,8 @@ import { useDispatch } from "react-redux";
 import styled from "styled-components";
 import { AppDispatch, useTypedSelector } from "../../store";
 import { logoutUser, selectUsers } from "../../store/usersSlice";
-import cookie from "cookie";
 
 import Loader from "../../components/Loader";
-import axios from "axios";
 import { productsList } from "../../server/products";
 
 const Home: NextPage = () => {
@@ -31,14 +29,6 @@ const Home: NextPage = () => {
       } else setcomplete(false);
     }
   }, [userLoading, complete, errorMsg]);
-
-  const payauth = async () => {
-    userInfo && (await axios.post("/api/auth/payauth", { _id: userInfo!._id }));
-  };
-
-  useEffect(() => {
-    userInfo ? payauth() : null;
-  }, [userInfo]);
 
   return (
     <div>
@@ -64,30 +54,12 @@ const Home: NextPage = () => {
         ))}
 
         <Div onClick={onLogout}>Logout</Div>
-        <Div onClick={payauth}>PAYAUTH</Div>
       </main>
     </div>
   );
 };
 
 export default Home;
-
-export const getServerSideProps = async (context: any) => {
-  const mycookie = cookie.parse(
-    (context.req && context.req.headers.cookie) || ""
-  );
-
-  let cookieNameData = {};
-  if (mycookie.whatevercookienameis) {
-    cookieNameData = mycookie.whatevercookienameis;
-  }
-
-  return {
-    props: {
-      cookieNameData,
-    },
-  };
-};
 
 const Div = styled.div`
   cursor: pointer;

@@ -1,26 +1,16 @@
-import { NextResponse } from "next/server";
+import { NextFetchEvent, NextResponse } from "next/server";
 import type { NextRequest } from "next/server";
 import { jwtVerify } from "jose";
 import { productsList } from "./server/products";
+import type { user } from "./server/models/userModel";
 
-export async function middleware(req: NextRequest) {
+export async function middleware(req: NextRequest, event: NextFetchEvent) {
   // const secret = process.env.JWT_TOKEN_SECRET;
   const daCookie = req.cookies.get("loginToken");
-
-  const allCookies = productsList.map(({ id }) => {
-    const c = { name: id, token: req.cookies.get(id) };
-    return c;
-  });
 
   const dynamicPath = productsList.find(
     ({ id }) => `/paid/product/${id}/` == req.nextUrl.pathname
   );
-
-  const dynaminCookie = allCookies.find(
-    ({ name, token }) => dynamicPath?.id == name
-  );
-
-  console.log(dynamicPath?.id, req.nextUrl.pathname);
 
   if (req.nextUrl.pathname.startsWith("/login")) {
     if (daCookie) {
@@ -44,23 +34,46 @@ export async function middleware(req: NextRequest) {
   ) {
     if (!daCookie) {
       console.log("doesnt have paidcookie and tried paid page");
-      return NextResponse.redirect(new URL("/payment", req.url));
+      return NextResponse.redirect(new URL("/login", req.url));
     } else {
-      if (!dynaminCookie?.token) {
-        console.log("doesnt have paidcookie and tried paid product");
+      try {
+        const { payload } = await jwtVerify(
+          daCookie,
+          new TextEncoder().encode(process.env.JWT_TOKEN_SECRET)
+        );
+
+        const url =
+          process.env["NODE_ENV"] === "development"
+            ? "http://localhost:3000"
+            : process.env["NEXT_PUBLIC_URL"];
+        const userUrl = () => `${url}/api/users/user`;
+        const res = await fetch(userUrl(), {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+            // 'Content-Type': 'application/x-www-form-urlencoded',
+          },
+          body: JSON.stringify({ _id: payload._id }),
+        });
+
+        const dbUser: user = await res.json();
+
+        const subscription = await dbUser.stripe.subscriptions.find(
+          ({ name }) => `/paid/product/${name}/` == req.nextUrl.pathname
+        );
+
+        const accessToken = <string>subscription?.access;
+
+        const { payload: PL } = await jwtVerify(
+          accessToken,
+          new TextEncoder().encode(process.env.JWT_TOKEN_SECRET)
+        );
+        // console.log("payload do token do produto", PL);
+        console.log("has valid paidcookie and access to product");
+        return NextResponse.next();
+      } catch (error) {
+        console.log("has invalid/expired cookie and tried product");
         return NextResponse.redirect(new URL("/payment", req.url));
-      } else {
-        try {
-          await jwtVerify(
-            dynaminCookie?.token,
-            new TextEncoder().encode(process.env.JWT_TOKEN_SECRET)
-          );
-          console.log("has valid paidcookie and access to product");
-          return NextResponse.next();
-        } catch (error) {
-          console.log("has invalid/expired cookie and tried product");
-          return NextResponse.redirect(new URL("/payment", req.url));
-        }
       }
     }
   } else {

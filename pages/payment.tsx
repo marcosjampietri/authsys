@@ -135,6 +135,7 @@ const PaymentForm = () => {
               }}
             />
             <div>{item.name}</div>
+            <div>{item.id}</div>
             <div>{`${
               "productId" == "productId" ? "Selected" : "CHANGE TO THIS"
             }`}</div>

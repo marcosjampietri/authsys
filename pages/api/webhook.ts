@@ -4,6 +4,7 @@ import { NextApiRequest, NextApiResponse } from "next";
 import Stripe from "stripe";
 import { connectToMongo } from "../../server";
 import user from "../../server/models/userModel";
+import type { user as UserType } from "../../server/models/userModel";
 
 export const config = {
   api: {
@@ -35,32 +36,27 @@ export default async (req: NextApiRequest, res: NextApiResponse) => {
 
     // Handle the event
     switch (event.type) {
-      case "checkout.session.completed":
-        const session = event.data.object;
-        // Note that you'll need to add an async prefix to this route handler
-        const { line_items } = await stripe.checkout.sessions.retrieve(
-          session.id,
-          {
-            expand: ["line_items"],
-          }
-        );
-      case "payment_intent.succeeded":
+      case "invoice.payment_succeeded":
         // Then define and call a function to handle the event payment_intent.succeeded
-        const pi = event.data.object;
+        const IP = await event.data.object;
 
+        console.log("invoice suceeded", IP);
         await connectToMongo();
 
-        const User = await user.findOne({ stripe: { id: pi.customer } });
+        const User: UserType | null = await user.findOne({
+          "stripe.id": IP!.customer,
+        });
         const secret = <Secret>process.env["JWT_TOKEN_SECRET"];
+        const UserID = await User!._id;
 
-        let token = jwt.sign({ id: User!._id }, secret, {
+        const token = await jwt.sign({ id: UserID }, secret, {
           algorithm: "HS256",
           expiresIn: 60 * 60 * 24 * 1,
         });
         // const product = line_items!.data[0].description;
-        const invoice = await stripe.invoices.retrieve(pi.invoice);
-        const product = invoice.lines.data[0].price!.product;
-        console.log(product);
+        // const invoice = await stripe.invoices.retrieve(pi.invoice);
+        const product = IP.lines.data[0].price!.product;
+        // console.log(product);
 
         const existingProduct =
           User!.stripe.subscriptions.filter((e) => e.name == product).length >
