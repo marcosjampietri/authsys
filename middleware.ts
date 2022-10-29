@@ -45,8 +45,11 @@ export async function middleware(req: NextRequest, event: NextFetchEvent) {
         const url =
           process.env["NODE_ENV"] === "development"
             ? "http://localhost:3000"
-            : process.env["NEXT_PUBLIC_URL"];
+            : "https://authsys.vercel.app";
         const userUrl = () => `${url}/api/users/user`;
+
+        console.log("URL usada na API", userUrl);
+
         const res = await fetch(userUrl(), {
           method: "POST",
           headers: {
@@ -58,6 +61,8 @@ export async function middleware(req: NextRequest, event: NextFetchEvent) {
 
         const dbUser: user = await res.json();
 
+        console.log("usuário recuperado", dbUser);
+
         const subscription = await dbUser.stripe.subscriptions.find(
           ({ name }) => `/paid/product/${name}/` == req.nextUrl.pathname
         );
@@ -68,7 +73,7 @@ export async function middleware(req: NextRequest, event: NextFetchEvent) {
           accessToken,
           new TextEncoder().encode(process.env.JWT_TOKEN_SECRET)
         );
-        // console.log("payload do token do produto", PL);
+        console.log("payload do token do produto", PL);
         console.log("has valid paidcookie and access to product");
         return NextResponse.next();
       } catch (error) {

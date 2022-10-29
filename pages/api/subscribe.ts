@@ -52,7 +52,7 @@ export default async function subscribe(
       customer = await stripe.customers.retrieve(User.stripe.id);
     }
 
-    console.log(customer);
+    // console.log(customer);
     // get product
     const product = await stripe.products.retrieve(productId);
     const price = await stripe.prices.retrieve(<string>product!.default_price);
