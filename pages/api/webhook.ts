@@ -28,7 +28,11 @@ export default async (req: NextApiRequest, res: NextApiResponse) => {
     let event: any;
 
     try {
-      event = stripe.webhooks.constructEvent(buf, sig, signingSecret);
+      event = stripe.webhooks.constructEvent(
+        buf,
+        sig?.toString(),
+        signingSecret
+      );
     } catch (err: any) {
       res.status(400).send(`Webhook Error: ${err.message}`);
       return;
