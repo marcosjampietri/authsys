@@ -95,6 +95,7 @@ const PaymentForm = () => {
         // });
 
         // dispatch(clearCart());
+        router.reload();
         router.push("/success");
       }
     } catch (err) {

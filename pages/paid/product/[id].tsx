@@ -43,9 +43,8 @@ export async function getStaticProps(context: any) {
 export default ProductPage;
 
 const Page = styled.main`
-  margin: 20px auto;
   min-height: 100vh;
-  padding-bottom: 30px;
+  padding: 5px;
   border-bottom: 1px solid hsla(0, 0%, 50%, 0.1);
 
   background: black;
@@ -54,7 +53,7 @@ const Page = styled.main`
 
 const Margin = styled.div`
   width: 100%;
-  margin: 100px auto;
+  padding-top: 100px;
   max-width: 600px;
 
   background: black;
