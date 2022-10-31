@@ -51,7 +51,7 @@ export default async (req: NextApiRequest, res: NextApiResponse) => {
 
         const token = await jwt.sign({ id: UserID }, secret, {
           algorithm: "HS256",
-          expiresIn: 60 * 60 * 24 * 1,
+          expiresIn: 60 * 60 * 24 * 1, //one day (um dia)
         });
         // const product = line_items!.data[0].description;
         // const invoice = await stripe.invoices.retrieve(pi.invoice);

@@ -147,7 +147,7 @@ const circle = createAnimation(
 
 function CircleLoader({
   loading = true,
-  color = "#000000",
+  color = "#69b1ec",
   speedMultiplier = 1,
   cssOverride = {},
   size = 50,

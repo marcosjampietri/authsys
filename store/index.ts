@@ -10,6 +10,8 @@ import stepper from "./stepperSlicer";
 import products from "./productsSlice";
 import mod from "./modSlicer";
 import toggle from "./toggleSlicer";
+import subscription from "./subscriptionSlice";
+import load from "./loadSlice";
 
 const combinedReducer = combineReducers({
   users,
@@ -17,6 +19,8 @@ const combinedReducer = combineReducers({
   stepper,
   mod,
   toggle,
+  subscription,
+  load,
 });
 
 const masterReducer = (state: any, action: any) => {
@@ -54,7 +58,7 @@ const makeStore = () => {
       {
         key: "root",
         storage: AsyncStorage,
-        blacklist: ["mod", "toggle"],
+        blacklist: ["mod", "toggle", "load"],
       },
       masterReducer
     ); // Create a new reducer with our existing reducer

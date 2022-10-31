@@ -48,7 +48,7 @@ export async function middleware(req: NextRequest, event: NextFetchEvent) {
             : "https://authsys.vercel.app";
         const userUrl = () => `${url}/api/users/user`;
 
-        console.log("URL usada na API", userUrl);
+        // console.log("URL usada na API", userUrl());
 
         const res = await fetch(userUrl(), {
           method: "POST",
@@ -104,7 +104,6 @@ export async function middleware(req: NextRequest, event: NextFetchEvent) {
 
 export const config = {
   matcher: [
-    "/",
     "/protected/:path*",
     "/login/:path*",
     "/payment/:path*",

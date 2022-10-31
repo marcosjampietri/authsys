@@ -13,6 +13,8 @@ import {
 
 import { useTypedSelector } from "../store/index";
 import { selectUsers } from "../store/usersSlice";
+import { selectProducts, setProductID } from "../store/subscriptionSlice";
+import { productsList } from "../server/products";
 
 const elemOptions = {
   style: {
@@ -34,9 +36,10 @@ const PaymentForm = () => {
   const router = useRouter();
 
   const { userInfo } = useTypedSelector(selectUsers);
+  const { productID } = useTypedSelector(selectProducts);
+  // const producState = useTypedSelector((state) => state.subscription);
 
   const [paying, setpaying] = useState(false);
-  const [productId, setproductId] = useState("prod_MgsHBTkR1JAr7c");
 
   const elements = useElements();
   const stripe = useStripe();
@@ -70,7 +73,7 @@ const PaymentForm = () => {
         name: userInfo!.name,
         email: userInfo!.email,
         paymentMethod: paymentMethodReq.paymentMethod!.id,
-        productId,
+        productID,
       });
 
       console.log(clientSecret);
@@ -99,50 +102,17 @@ const PaymentForm = () => {
     }
   };
 
-  const productsList = [
-    {
-      name: "guitar course",
-      id: "prod_MgsHYsCjHi90iO",
-    },
-    {
-      name: "Gym Pro Package",
-      id: "prod_MgsHBTkR1JAr7c",
-    },
-    {
-      name: "Premium Plan",
-      id: "prod_MgsGOzGRz8ylF6",
-    },
-  ];
+  console.log(productID);
 
-  console.log(productId);
+  const selectedProduct = productsList.find(({ id }) => id == productID);
 
   return (
     <>
-      {productsList.map((item, index) => (
-        <RadioWrapp key={index}>
-          <label
-            htmlFor={`#${index}`}
-            className={`${productId == item.id ? "active" : null}`}
-          >
-            <input
-              type="radio"
-              name="option"
-              value={index}
-              checked={productId == item.id}
-              id={`#${index}`}
-              onChange={() => {
-                setproductId(productsList[index].id);
-              }}
-            />
-            <div>{item.name}</div>
-            <div>{item.id}</div>
-            <div>{`${
-              "productId" == "productId" ? "Selected" : "CHANGE TO THIS"
-            }`}</div>
-          </label>
-        </RadioWrapp>
-      ))}
       <Form onSubmit={handleSubmit}>
+        <SelectedProduct>
+          <h2>{selectedProduct?.name}</h2>
+          <p>£{selectedProduct?.price}</p>
+        </SelectedProduct>
         {paying ? (
           <Loading>
             <h4>Connecting to your Bank...</h4>
@@ -225,14 +195,26 @@ const Label = styled.label`
   align-self: start;
 `;
 
-const RadioWrapp = styled.div`
-  label {
-    padding: 24px 0px 4px 2px;
+const SelectedProduct = styled.div`
+  margin: 20px;
+  padding: 20px 0px;
 
-    align-self: start;
+  display: flex;
+  justify-content: space-between;
+  align-items: end;
+
+  border-bottom: 2px solid hsla(340, 100%, 50%, 1);
+
+  h2 {
+    text-transform: uppercase;
+    font-size: 18px;
+    font-weight: bold;
+    color: hsla(0, 0%, 30%, 1);
   }
-  .active {
-    background: blue;
+  p {
+    font-size: 26px;
+    font-weight: bold;
+    color: hsl(0, 0%, 44%);
   }
 `;
 

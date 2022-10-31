@@ -1,6 +1,7 @@
 import type { NextPage } from "next";
 import Link from "next/link";
 import Head from "next/head";
+import { Items } from "../styles/styled";
 
 const Home: NextPage = () => {
   return (
@@ -13,8 +14,10 @@ const Home: NextPage = () => {
 
       <main>
         <h1>HOME</h1>
-        <Link href="/protected">Protected</Link>
-        <Link href="/login">Login</Link>
+        <Items>
+          <Link href="/protected">Protected</Link>
+          <Link href="/login">Login</Link>
+        </Items>
       </main>
     </div>
   );

@@ -109,9 +109,9 @@ export const usersSlice = createSlice({
     resetError(state) {
       state.errorMsg = "";
     },
-    setActiveAddress(state, { payload }) {
-      state.activeAddress = payload;
-    },
+    // setActiveAddress(state, { payload }) {
+    //   state.activeAddress = payload;
+    // },
   },
   extraReducers: (builder) => {
     builder.addCase(registerUser.pending, (state) => {
@@ -171,6 +171,7 @@ export const usersSlice = createSlice({
         userInfo: null,
         errorMsg: "",
         activeAddress: 0,
+        complete: false,
       };
     });
     builder.addCase(logoutUser.rejected, (state, action) => {
@@ -205,6 +206,6 @@ export const usersSlice = createSlice({
   },
 });
 
-export const { resetError, setActiveAddress } = usersSlice.actions;
+export const { resetError } = usersSlice.actions;
 export const selectUsers = (state: AppState) => <UserState>state.users;
 export default usersSlice.reducer;

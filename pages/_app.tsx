@@ -1,12 +1,17 @@
 import "../styles/globals.css";
 import type { AppProps } from "next/app";
-import { wrapper } from "../store/";
+import { useTypedSelector, wrapper } from "../store/";
 import { Provider, useDispatch } from "react-redux";
 import { useRouter } from "next/router";
 import { Transition, animated, config } from "react-spring";
 import styled from "styled-components";
 import { loadStripe } from "@stripe/stripe-js";
 import { Elements } from "@stripe/react-stripe-js";
+import NavBar from "../components/NavBar";
+import { selectUsers } from "../store/usersSlice";
+import { selectload } from "../store/loadSlice";
+import { useEffect } from "react";
+import Loader from "../components/Loader";
 
 const stripePromise = loadStripe(
   "pk_test_51JP5tCEV3aJ0axV3AgECWzYOvcF1T8X4j8FRt6nYeLwwoxgfc9bvRfgATmBu6U0k1XYStmZ43soklcbdGy0LBgD300G4pdBwfD"
@@ -41,9 +46,25 @@ const AppChild = ({ Component, pageProps }: AppProps) => {
       pageProps,
     },
   ];
+  const { userLoading, errorMsg } = useTypedSelector(selectUsers);
+  const { complete, setcomplete } = useTypedSelector(selectload);
+
+  useEffect(() => {
+    if (!userLoading && complete) {
+      if (!errorMsg) {
+        router.reload();
+      } else dispatch(setcomplete(false));
+    }
+  }, [userLoading, complete, errorMsg]);
 
   return (
     <>
+      {complete && !errorMsg ? (
+        <WrapLoader>
+          <Loader size={150} />
+        </WrapLoader>
+      ) : null}
+      <NavBar />
       <NextChild>
         <StyledDiv>
           <Transition
@@ -95,6 +116,20 @@ const NextChild = styled.div`
 const StyledDiv = styled.div`
   width: 100vw;
   height: 100%;
+`;
+
+const WrapLoader = styled.div`
+  position: fixed;
+  top: 0px;
+  width: 100vw;
+  height: 100vh;
+  z-index: 100;
+
+  background: hsla(0, 0%, 100%, 0.3);
+  backdrop-filter: blur(3px);
+
+  display: grid;
+  place-items: center;
 `;
 
 // export default wrapper.withRedux(MyApp);

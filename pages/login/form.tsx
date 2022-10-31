@@ -11,9 +11,9 @@ import { Field, Label, Submit, Form, Input, Warn, Err } from "./styles";
 import { registerUser, loginUser, selectUsers } from "../../store/usersSlice";
 import { AppDispatch } from "../../store/index";
 import { useTypedSelector } from "../../store/index";
-import { useRouter } from "next/router";
-import { useEffect, useState } from "react";
-import Loader from "../../components/Loader";
+import { useEffect } from "react";
+
+import { selectload, setComplete } from "../../store/loadSlice";
 
 type Inputs = {
   name: string;
@@ -25,19 +25,8 @@ type Inputs = {
 
 const FormComponent = ({ reg }: any) => {
   const dispatch: AppDispatch = useDispatch();
-  const router = useRouter();
-  const [complete, setcomplete] = useState(false);
-
   const { userLoading, errorMsg } = useTypedSelector(selectUsers);
-
-  useEffect(() => {
-    if (!userLoading && complete) {
-      if (!errorMsg) {
-        // router.push("/");
-        router.reload();
-      } else setcomplete(false);
-    }
-  }, [userLoading, complete, errorMsg]);
+  const { complete } = useTypedSelector(selectload);
 
   useEffect(() => {
     const change = !userLoading && complete && !errorMsg;
@@ -89,7 +78,7 @@ const FormComponent = ({ reg }: any) => {
     try {
       const { name, email, password } = userData;
       dispatch(registerUser({ name, email, password }));
-      setcomplete(true);
+      dispatch(setComplete(true));
     } catch (err) {
       alert("something wrong is not right");
     }
@@ -99,7 +88,7 @@ const FormComponent = ({ reg }: any) => {
     try {
       const { email, password } = userData;
       dispatch(loginUser({ email, password }));
-      setcomplete(true);
+      dispatch(setComplete(true));
     } catch (err) {
       alert("something wrong is not right");
     }
@@ -127,11 +116,6 @@ const FormComponent = ({ reg }: any) => {
 
   return (
     <>
-      {complete && (!errorMsg || userLoading) ? (
-        <WrapLoader>
-          <Loader size={150} />
-        </WrapLoader>
-      ) : null}
       <Form
         noValidate
         onSubmit={handleSubmit(reg ? submitHandler : submitHandlerLogin)}
@@ -296,13 +280,6 @@ const Blank = styled.div`
   height: 5vh;
 `;
 
-const Load = styled.div`
-  width: 100%;
-
-  display: grid;
-  place-items: center;
-`;
-
 const SubmitWrap = styled.div`
   position: fixed;
   left: 0px;
@@ -320,28 +297,4 @@ const SubmitWrap = styled.div`
 
 const ErrorWrap = styled(animated.div)`
   position: relative;
-`;
-
-const WrapForm = styled.div`
-  position: relative;
-  width: 100%;
-
-  display: flex;
-  justify-content: center;
-
-  .ll {
-    position: absolute;
-    left: 0px;
-    width: 100%;
-  }
-`;
-const WrapLoader = styled(WrapForm)`
-  position: fixed;
-  top: 0px;
-  align-items: center;
-  width: 100vw;
-  height: 100vh;
-  background: hsla(0, 0%, 100%, 0.5);
-  backdrop-filter: blur(2px);
-  z-index: 2;
 `;

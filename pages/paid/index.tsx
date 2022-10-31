@@ -1,34 +1,16 @@
 import type { NextPage } from "next";
 import Head from "next/head";
 import Link from "next/link";
-import { useRouter } from "next/router";
-import { useEffect, useState } from "react";
 import { useDispatch } from "react-redux";
 import styled from "styled-components";
-import { AppDispatch, useTypedSelector } from "../../store";
-import { logoutUser, selectUsers } from "../../store/usersSlice";
+import { AppDispatch } from "../../store";
 
-import Loader from "../../components/Loader";
 import { productsList } from "../../server/products";
+import { setProductID } from "../../store/subscriptionSlice";
+import { Items } from "../../styles/styled";
 
 const Home: NextPage = () => {
   const dispatch: AppDispatch = useDispatch();
-  const router = useRouter();
-  const [complete, setcomplete] = useState(false);
-  const { userLoading, errorMsg, userInfo } = useTypedSelector(selectUsers);
-
-  const onLogout = () => {
-    dispatch(logoutUser());
-    setcomplete(true);
-  };
-
-  useEffect(() => {
-    if (!userLoading && complete) {
-      if (!errorMsg) {
-        router.reload();
-      } else setcomplete(false);
-    }
-  }, [userLoading, complete, errorMsg]);
 
   return (
     <div>
@@ -39,21 +21,22 @@ const Home: NextPage = () => {
       </Head>
 
       <main>
-        {complete && !errorMsg ? (
-          <WrapLoader>
-            <Loader size={150} />
-          </WrapLoader>
-        ) : null}
-        <h1>PAID ROUTE</h1>
-        <Link href="/">Home</Link>
-        <Link href="/login">Login</Link>
-        {productsList.map(({ id }) => (
-          <Link key={id} href={`/paid/product/${id}`}>
-            {id}
-          </Link>
-        ))}
-
-        <Div onClick={onLogout}>Logout</Div>
+        <h1>PAID CONTENT</h1>
+        <Items>
+          <Link href="/">Home</Link>
+          <Link href="/protected">protected</Link>
+          <Div>
+            {productsList.map(({ id, name, price }) => (
+              <Product key={id} onClick={() => dispatch(setProductID(id))}>
+                <Link href={`/paid/product/${id}`}>
+                  <h2>{name}</h2>
+                  <h2 style={{ fontSize: "22px" }}>£{price}</h2>
+                  <p> ID: {id}</p>
+                </Link>
+              </Product>
+            ))}
+          </Div>
+        </Items>
       </main>
     </div>
   );
@@ -62,31 +45,29 @@ const Home: NextPage = () => {
 export default Home;
 
 const Div = styled.div`
-  cursor: pointer;
-`;
-function useRopute() {
-  throw new Error("Function not implemented.");
-}
-
-const WrapForm = styled.div`
-  position: relative;
-  width: 100%;
-
   display: flex;
-  justify-content: center;
-
-  .ll {
-    position: absolute;
-    left: 0px;
-    width: 100%;
-  }
+  flex-wrap: wrap;
 `;
-const WrapLoader = styled(WrapForm)`
-  position: fixed;
-  top: 0px;
-  align-items: center;
-  width: 100vw;
-  height: 100vh;
-  background: hsla(0, 0%, 100%, 0.5);
-  backdrop-filter: blur(2px);
+
+const Product = styled.div`
+  width: 270px;
+  background-image: linear-gradient(white, hsla(210, 20%, 60%, 1));
+  margin: 10px;
+  padding: 10px;
+
+  border-radius: 5px;
+  box-shadow: 2px 2px 5px hsla(0, 0%, 0%, 0.3);
+
+  h2 {
+    text-transform: uppercase;
+    font-size: 18px;
+    letter-spacing: 0.05em;
+    color: #2c2c2c;
+
+    margin-bottom: 10px;
+  }
+  p {
+    font-size: 12px;
+    color: #717171;
+  }
 `;

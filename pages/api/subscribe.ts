@@ -16,7 +16,7 @@ export default async function subscribe(
 ) {
   try {
     if (req.method != "POST") return res.status(400);
-    const { id, name, email, paymentMethod, productId } = req.body;
+    const { id, name, email, paymentMethod, productID } = req.body;
 
     await connectToMongo();
 
@@ -54,7 +54,7 @@ export default async function subscribe(
 
     // console.log(customer);
     // get product
-    const product = await stripe.products.retrieve(productId);
+    const product = await stripe.products.retrieve(productID);
     const price = await stripe.prices.retrieve(<string>product!.default_price);
     const subscription = await stripe.subscriptions.create({
       customer: customer.id,
@@ -62,7 +62,7 @@ export default async function subscribe(
         {
           price_data: {
             currency: "gbp",
-            product: productId,
+            product: productID,
             unit_amount: <number | undefined>price.unit_amount,
             recurring: {
               interval: <any>price.recurring?.interval,
