@@ -42,10 +42,14 @@ export async function getStaticProps(context: any) {
 
 export default ProductPage;
 
-const Page = styled.div`
+const Page = styled.main`
   margin: 20px auto;
+  min-height: 100vh;
   padding-bottom: 30px;
   border-bottom: 1px solid hsla(0, 0%, 50%, 0.1);
+
+  background: black;
+  color: white;
 `;
 
 const Margin = styled.div`
@@ -54,10 +58,12 @@ const Margin = styled.div`
   max-width: 600px;
 
   background: black;
+  color: white;
 
   span {
     margin: 10px 0px;
     font-size: 26px;
     text-shadow: 0px 0px 3px white;
+    color: white;
   }
 `;

@@ -13,33 +13,24 @@ const Home: NextPage = () => {
         <link rel="icon" href="/favicon.ico" />
       </Head>
 
-      <main>
+      <Main>
         <h1>PROTECTED</h1>
         <Items>
           <Link href="/"> Home</Link>
           <Link href="/paid"> Paid Content</Link>
         </Items>
-      </main>
+      </Main>
     </div>
   );
 };
 
 export default Home;
 
-const Div = styled.div`
-  cursor: pointer;
-`;
+const Main = styled.main`
+  min-height: 100vh;
+  background-color: white;
 
-const WrapForm = styled.div`
-  position: relative;
-  width: 100%;
-
-  display: flex;
-  justify-content: center;
-
-  .ll {
-    position: absolute;
-    left: 0px;
-    width: 100%;
+  h1 {
+    color: black;
   }
 `;

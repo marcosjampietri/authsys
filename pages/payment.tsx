@@ -95,7 +95,7 @@ const PaymentForm = () => {
         // });
 
         // dispatch(clearCart());
-        router.push("/protected");
+        router.push("/success");
       }
     } catch (err) {
       console.log(err);
@@ -132,12 +132,12 @@ const PaymentForm = () => {
         <CardNumberElementStyled id="cardNumber" options={elemOptions} />
 
         <div>
-          <div>
+          <div style={{ paddingRight: "5px" }}>
             <Label htmlFor="expiry">Card Expiration (use 12/33)</Label>
             <CardExpiryElementStyled id="expiry" options={elemOptions} />
           </div>
 
-          <div>
+          <div style={{ paddingLeft: "5px" }}>
             <Label htmlFor="cvc">CVC (use 123)</Label>
             <CardCvcElementStyled id="cvc" options={elemOptions} />
           </div>
@@ -179,9 +179,10 @@ const Form = styled.form`
   div {
     display: flex;
     width: 100%;
+    justify-content: space-between;
 
     div {
-      width: 90%;
+      width: 100%;
       display: flex;
       flex-direction: column;
       align-items: space-between;
@@ -191,7 +192,7 @@ const Form = styled.form`
 
 const Label = styled.label`
   padding: 24px 0px 4px 2px;
-
+  color: black;
   align-self: start;
 `;
 

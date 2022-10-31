@@ -3,8 +3,12 @@ import Link from "next/link";
 import Head from "next/head";
 import { Items } from "../styles/styled";
 import styled from "styled-components";
+import { useTypedSelector } from "../store";
+import { selectProducts } from "../store/productsSlice";
 
-const Home: NextPage = () => {
+const Success: NextPage = () => {
+  const { productID } = useTypedSelector(selectProducts);
+
   return (
     <div>
       <Head>
@@ -14,23 +18,24 @@ const Home: NextPage = () => {
       </Head>
 
       <Main>
-        <h1>HOME</h1>
+        <h1>Payment Successful</h1>
         <Items>
-          <Link href="/protected">Protected</Link>
-          <Link href="/login">Login</Link>
+          <h3>have access to your product from the paid page</h3>
+          <Link href="/paid">Protected</Link>
         </Items>
       </Main>
     </div>
   );
 };
 
-export default Home;
+export default Success;
 
 const Main = styled.main`
   min-height: 100vh;
   background-color: white;
 
-  h1 {
+  h1,
+  h3 {
     color: black;
   }
 `;

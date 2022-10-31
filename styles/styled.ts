@@ -6,7 +6,6 @@ export const Items = styled.div`
   flex-direction: column;
   a {
     width: 150px;
-    /* height: 100px; */
     margin: 10px;
     padding: 20px 0px;
 
@@ -15,5 +14,6 @@ export const Items = styled.div`
     font-weight: bold;
     background: hsla(0, 0%, 70%, 0.1);
     text-transform: uppercase;
+    color: black;
   }
 `;

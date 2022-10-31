@@ -8,9 +8,11 @@ import { AppDispatch } from "../../store";
 import { productsList } from "../../server/products";
 import { setProductID } from "../../store/subscriptionSlice";
 import { Items } from "../../styles/styled";
+import { useRouter } from "next/router";
 
 const Home: NextPage = () => {
   const dispatch: AppDispatch = useDispatch();
+  const { push } = useRouter();
 
   return (
     <div>
@@ -20,29 +22,42 @@ const Home: NextPage = () => {
         <link rel="icon" href="/favicon.ico" />
       </Head>
 
-      <main>
+      <Main>
         <h1>PAID CONTENT</h1>
         <Items>
           <Link href="/">Home</Link>
           <Link href="/protected">protected</Link>
           <Div>
             {productsList.map(({ id, name, price }) => (
-              <Product key={id} onClick={() => dispatch(setProductID(id))}>
-                <Link href={`/paid/product/${id}`}>
-                  <h2>{name}</h2>
-                  <h2 style={{ fontSize: "22px" }}>£{price}</h2>
-                  <p> ID: {id}</p>
-                </Link>
+              <Product
+                key={id}
+                onClick={() => {
+                  dispatch(setProductID(id));
+                  push(`/paid/product/${id}`);
+                }}
+              >
+                <h2>{name}</h2>
+                <h2 style={{ fontSize: "22px" }}>£{price}</h2>
+                <p> ID: {id}</p>
               </Product>
             ))}
           </Div>
         </Items>
-      </main>
+      </Main>
     </div>
   );
 };
 
 export default Home;
+
+const Main = styled.main`
+  min-height: 100vh;
+  background-color: white;
+
+  h1 {
+    color: black;
+  }
+`;
 
 const Div = styled.div`
   display: flex;
@@ -51,12 +66,13 @@ const Div = styled.div`
 
 const Product = styled.div`
   width: 270px;
-  background-image: linear-gradient(white, hsla(210, 20%, 60%, 1));
   margin: 10px;
   padding: 10px;
 
+  background-image: linear-gradient(white, hsla(210, 30%, 90%, 1));
   border-radius: 5px;
-  box-shadow: 2px 2px 5px hsla(0, 0%, 0%, 0.3);
+  box-shadow: 2px 2px 10px hsla(0, 0%, 0%, 0.2);
+  cursor: pointer;
 
   h2 {
     text-transform: uppercase;
@@ -68,6 +84,7 @@ const Product = styled.div`
   }
   p {
     font-size: 12px;
-    color: #717171;
+    color: hsla(0, 0%, 50%, 1);
+    font-weight: 200;
   }
 `;

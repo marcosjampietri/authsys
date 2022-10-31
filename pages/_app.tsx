@@ -9,7 +9,7 @@ import { loadStripe } from "@stripe/stripe-js";
 import { Elements } from "@stripe/react-stripe-js";
 import NavBar from "../components/NavBar";
 import { selectUsers } from "../store/usersSlice";
-import { selectload } from "../store/loadSlice";
+import { selectload, setComplete } from "../store/loadSlice";
 import { useEffect } from "react";
 import Loader from "../components/Loader";
 
@@ -47,13 +47,13 @@ const AppChild = ({ Component, pageProps }: AppProps) => {
     },
   ];
   const { userLoading, errorMsg } = useTypedSelector(selectUsers);
-  const { complete, setcomplete } = useTypedSelector(selectload);
+  const { complete } = useTypedSelector(selectload);
 
   useEffect(() => {
     if (!userLoading && complete) {
       if (!errorMsg) {
         router.reload();
-      } else dispatch(setcomplete(false));
+      } else dispatch(setComplete(false));
     }
   }, [userLoading, complete, errorMsg]);
 
