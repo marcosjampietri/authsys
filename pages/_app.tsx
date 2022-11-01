@@ -118,7 +118,7 @@ const StyledDiv = styled.div`
   height: 100%;
 `;
 
-const WrapLoader = styled.div`
+export const WrapLoader = styled.div`
   position: fixed;
   top: 0px;
   width: 100vw;

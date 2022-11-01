@@ -15,6 +15,9 @@ import { useTypedSelector } from "../store/index";
 import { selectUsers } from "../store/usersSlice";
 import { selectProducts, setProductID } from "../store/subscriptionSlice";
 import { productsList } from "../server/products";
+import { selectload, setPaying } from "../store/loadSlice";
+import { WrapLoader } from "./_app";
+import Loader from "../components/Loader";
 
 const elemOptions = {
   style: {
@@ -37,9 +40,10 @@ const PaymentForm = () => {
 
   const { userInfo } = useTypedSelector(selectUsers);
   const { productID } = useTypedSelector(selectProducts);
+  const { paying } = useTypedSelector(selectload);
   // const producState = useTypedSelector((state) => state.subscription);
 
-  const [paying, setpaying] = useState(false);
+  // const [paying, setComplete] = useState(false);
 
   const elements = useElements();
   const stripe = useStripe();
@@ -50,6 +54,8 @@ const PaymentForm = () => {
     if (!stripe || !elements) {
       return;
     }
+
+    // dispatch(setComplete(true))
 
     try {
       //create order
@@ -79,23 +85,17 @@ const PaymentForm = () => {
       console.log(clientSecret);
       const { error } = await stripe!.confirmCardPayment(clientSecret);
 
-      //TODO Send Error messages
-
       if (error) {
         console.log("[error]", error);
-        {
-          /* dispatch({
-                    type: "PAYMENT_FAILED",
-                }); */
-        }
+        //TODO Send Error messages
       } else {
+        // send email of purchase confirmation
         // const { data } = await axios.post("/api/send", {
         //   userInfo,
         //   // yourCart,
         // });
 
         // dispatch(clearCart());
-        router.reload();
         router.push("/success");
       }
     } catch (err) {
@@ -109,23 +109,18 @@ const PaymentForm = () => {
 
   return (
     <>
+      {paying ? (
+        <WrapLoader>
+          <Loader size={150} />
+        </WrapLoader>
+      ) : null}
       <Form onSubmit={handleSubmit}>
         <SelectedProduct>
           <h2>{selectedProduct?.name}</h2>
           <p>£{selectedProduct?.price}</p>
         </SelectedProduct>
-        {paying ? (
-          <Loading>
-            <h4>Connecting to your Bank...</h4>
-            <div />
-          </Loading>
-        ) : null}
         <Label htmlFor="name">Full Name</Label>
-        <Name
-          id="name"
-          placeholder="João Ninguém"
-          style={{ mixBlendMode: "initial" }}
-        />
+        <Name id="name" placeholder="João Ninguém" />
 
         <Label htmlFor="cardNumber">
           Card Number (use: 4242 4242 4242 4242)
@@ -144,12 +139,15 @@ const PaymentForm = () => {
           </div>
         </div>
 
-        <Button
-          type="submit"
-          disabled={!stripe}
-          onClick={() => setpaying(true)}
-        >
-          PAY
+        <Button>
+          <button
+            className={!stripe || !elements ? "inactive" : ""}
+            type="submit"
+            disabled={!stripe}
+            onClick={() => dispatch(setPaying(true))}
+          >
+            PAY
+          </button>
         </Button>
       </Form>
     </>
@@ -220,21 +218,30 @@ const SelectedProduct = styled.div`
   }
 `;
 
-const Button = styled.button`
-  width: 100%;
-  max-width: 600px;
-  height: 50px;
-  margin: 20px auto;
+const Button = styled.div`
+  button {
+    width: 100%;
+    max-width: 600px;
+    height: 50px;
+    margin: 20px auto;
 
-  background: hsla(340, 100%, 50%, 1);
-  background-image: linear-gradient(
-    hsla(335, 100%, 50%, 1),
-    hsla(345, 100%, 50%, 1)
-  );
-  box-shadow: 1px -1px 4px hsla(240, 50%, 0%, 0.3);
-  border-radius: 5px;
-  border: none;
-  color: white;
+    background: hsla(340, 100%, 50%, 1);
+    background-image: linear-gradient(
+      hsla(335, 100%, 50%, 1),
+      hsla(345, 100%, 50%, 1)
+    );
+    box-shadow: 1px -1px 4px hsla(240, 50%, 0%, 0.3);
+    border-radius: 5px;
+    border: none;
+    color: white;
+  }
+
+  .active {
+    background-image: linear-gradient(
+      hsla(335, 0%, 50%, 1),
+      hsla(345, 0%, 50%, 1)
+    );
+  }
 `;
 
 const Name = styled.input`

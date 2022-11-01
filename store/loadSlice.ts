@@ -7,6 +7,7 @@ interface loadState {
 
 const initialState = {
   complete: false,
+  paying: false,
 } as loadState;
 
 const loadSlice = createSlice({
@@ -16,9 +17,15 @@ const loadSlice = createSlice({
     setComplete(state, { payload }) {
       state.complete = payload;
     },
+    setPaying: (state, { payload }) => {
+      return {
+        ...state,
+        paying: payload,
+      };
+    },
   },
 });
 
-export const { setComplete } = loadSlice.actions;
+export const { setComplete, setPaying } = loadSlice.actions;
 export const selectload = (state: AppState) => state.load;
 export default loadSlice.reducer;

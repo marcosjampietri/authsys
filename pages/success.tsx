@@ -4,10 +4,19 @@ import Head from "next/head";
 import { Items } from "../styles/styled";
 import styled from "styled-components";
 import { useTypedSelector } from "../store";
-import { selectProducts } from "../store/productsSlice";
+import { useRouter } from "next/router";
+import { useEffect } from "react";
+import { selectload } from "../store/loadSlice";
 
 const Success: NextPage = () => {
-  const { productID } = useTypedSelector(selectProducts);
+  // const { productID } = useTypedSelector(selectProducts);
+  const router = useRouter();
+
+  const { paying } = useTypedSelector(selectload);
+
+  useEffect(() => {
+    if (paying) router.reload();
+  }, [paying]);
 
   return (
     <div>
