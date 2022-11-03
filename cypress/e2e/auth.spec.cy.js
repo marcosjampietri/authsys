@@ -13,17 +13,21 @@ it("runs auth flow for successful login to protected reservations page", () => {
   //     cy.findByRole("button", { name: /purchase/i }).should("not.exist");
 
   //     // enter valid sign-in credentials
-  //     cy.findByLabelText(/email address/i)
-  //       .clear()
-  //       .type(Cypress.env("TEST_USER_EMAIL"));
+  cy.get('input[type="email"]').clear().type(Cypress.env("TEST_USER_EMAIL"));
 
   //     cy.findByLabelText(/password/i)
   //       .clear()
   //       .type(Cypress.env("TEST_PASSWORD"));
 
+  cy.get('input[type="password"]').clear().type(Cypress.env("TEST_PASSWORD"));
+
   //     // submit the form
   //     cy.findByRole("main").within(() => {
   //       cy.findByRole("button", { name: /sign in/i }).click();
+
+  cy.get("form").contains("LOGIN").click();
+
+  cy.get("h1").contains("PROTECTED").should("exist");
 });
 
 //     // check for purchase button and band name
@@ -95,30 +99,26 @@ it("runs auth flow for successful login to protected reservations page", () => {
 //     cy.findByRole("button", { name: /sign in/i }).should("not.exist");
 //   });
 
-//   it("redirects to sign-in for protected pages", () => {
-//     cy.fixture("protected-pages.json").then((urls) => {
-//       urls.forEach(($url) => {
-//         cy.visit($url);
-//         cy.findByLabelText(/email address/i).should("exist");
-//         cy.findByLabelText(/password/i).should("exist");
-//       });
-//     });
-//   });
+it("redirects to sign-in for protected pages", () => {
+  cy.fixture("protected-pages.json").then((urls) => {
+    urls.forEach(($url) => {
+      cy.visit($url);
+      cy.get('input[type="email"]').should("exist");
+      cy.get('input[type="password"]').should("exist");
+    });
+  });
+});
 
-//   it("does not show sign-in page when already signed in", () => {
-//     cy.task("db:reset").signIn(
-//       Cypress.env("TEST_USER_EMAIL"),
-//       Cypress.env("TEST_PASSWORD")
-//     );
+// it("does not show sign-in page when already signed in", () => {
+//   // cy.task("db:reset").signIn(
+//   cy.login(Cypress.env("TEST_USER_EMAIL"), Cypress.env("TEST_PASSWORD"));
 
-//     // access tickets page for first show
-//     cy.visit("/reservations/0");
+//   // access tickets page for first show
+//   cy.visit("/paid");
 
-//     // make sure there's no sign-in page
-//     cy.findByRole("heading", { name: /sign in to your account/i }).should(
-//       "not.exist"
-//     );
+//   // make sure there's no sign-in page
+//   //   cy.get("div").contains("I DONT HAVE AN ACCOUNT").should("not.exist");
 
-//     // make sure ticket purchase button shows
-//     cy.findByRole("button", { name: /purchase/i }).should("exist");
-//   });
+//   // make sure ticket purchase button shows
+//   cy.get("h1").contains("PAID CONTENT").should("exist");
+// });
