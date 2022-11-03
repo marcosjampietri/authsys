@@ -14,7 +14,7 @@ const Home: NextPage = () => {
       </Head>
 
       <Main>
-        <h1>HOME</h1>
+        <h1 className="h1">HOME</h1>
         <Items>
           <Link href="/protected">Protected</Link>
           <Link href="/login">Login</Link>

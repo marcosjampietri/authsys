@@ -1,0 +1,67 @@
+[
+  {
+    "_id": {
+      "$oid": "63604246397e56fd9c9e2719"
+    },
+    "name": "Marcos",
+    "email": "zxc@gmail.com",
+    "password": "$2b$10$VeOJIWeMHCvFrMlNwTvp2eNs.fPje6pH21clr48soLLKbKt.DDOd6",
+    "address": [],
+    "stripe": {
+      "id": "cus_MiWs0PLhvoYzyz",
+      "subscriptions": [
+        {
+          "name": "prod_MgsGOzGRz8ylF6",
+          "access": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjYzNjA0MjQ2Mzk3ZTU2ZmQ5YzllMjcxOSIsImlhdCI6MTY2NzI1MjgzNCwiZXhwIjoxNjY3MzM5MjM0fQ.mHiVHI8WtJDvyzWR1ELQ0rP3oSVwfo_5Bqcz-z8Iycg",
+          "_id": {
+            "$oid": "63604262397e56fd9c9e2720"
+          }
+        },
+        {
+          "name": "prod_MgsHBTkR1JAr7c",
+          "access": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjYzNjA0MjQ2Mzk3ZTU2ZmQ5YzllMjcxOSIsImlhdCI6MTY2NzI1MzI3NCwiZXhwIjoxNjY3MzM5Njc0fQ.V7TIGAQBVnVBPtT81JIsY-ea50HHtTj-_aBqj9CK4tw",
+          "_id": {
+            "$oid": "6360441a6f064fd565a3e5b2"
+          }
+        },
+        {
+          "name": "prod_MgsHYsCjHi90iO",
+          "access": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjYzNjA0MjQ2Mzk3ZTU2ZmQ5YzllMjcxOSIsImlhdCI6MTY2NzMzMTM3OCwiZXhwIjoxNjY3NDE3Nzc4fQ.o4lL-FWg9fU2IGD781qErMHWK5zOK2mlBs1HZGyuSPE",
+          "_id": {
+            "$oid": "63617532927e91cc06b83af6"
+          }
+        }
+      ]
+    },
+    "__v": 0
+  },
+  {
+    "_id": {
+      "$oid": "63617ab02aa890d8b878df1c"
+    },
+    "name": "MARCOS DE PAIVA",
+    "email": "123@gmail.com",
+    "password": "$2b$10$u.aG.w3v2/gBssoG6gIu3ecZlB0HF6DmjzOrzFfF5eyn2u74Dpe12",
+    "address": [],
+    "stripe": {
+      "id": "cus_MitNoP07hCx8Nt",
+      "subscriptions": [
+        {
+          "name": "prod_MgsGOzGRz8ylF6",
+          "access": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjYzNjE3YWIwMmFhODkwZDhiODc4ZGYxYyIsImlhdCI6MTY2NzMzNjUyNSwiZXhwIjoxNjY3NDIyOTI1fQ.D6UaWLYYR5CPuYCn6s1e9DXb3W4F3KfzcVG_aK1sNaM",
+          "_id": {
+            "$oid": "6361894d8d1797d8db9b61f5"
+          }
+        },
+        {
+          "name": "prod_MgsHBTkR1JAr7c",
+          "access": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjYzNjE3YWIwMmFhODkwZDhiODc4ZGYxYyIsImlhdCI6MTY2NzMzNjc0MywiZXhwIjoxNjY3NDIzMTQzfQ.y2H0GeF_UWJ8uxFYzp0lM90UGbu26AkurC7Itar2s2Y",
+          "_id": {
+            "$oid": "63618a2759a497ad2c26b891"
+          }
+        }
+      ]
+    },
+    "__v": 0
+  }
+]
