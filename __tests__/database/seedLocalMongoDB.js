@@ -1,19 +1,12 @@
 const MongoClient = require("mongodb").MongoClient;
-const { connect, disconnect } = require("mongoose");
+const { disconnect } = require("mongoose");
 const { ObjectId } = require("mongodb");
 const users = require("./users.json");
+const { connectToMongo, uri } = require("./mongo");
 
 const dataToSeed = { users };
 
 const DB = "SUBSCRIPTION";
-
-const uri = process.env.DATABASE;
-async function connectToMongo() {
-  // 4. Connect to MongoDB
-  connect(uri);
-
-  console.log("connected to MongoDB using mongoose 6... yaayy"); // 'bill@initech.com'
-}
 
 const oidToObjectId = (jsonData) =>
   jsonData.map((item) =>

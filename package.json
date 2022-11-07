@@ -57,6 +57,8 @@
     "@types/stripe": "^8.0.417",
     "@types/styled-components": "^5.1.26",
     "cypress": "^10.11.0",
+    "cypress-plugin-stripe-elements": "^1.0.2",
+    "dotenv": "^16.0.3",
     "env-cmd": "^10.1.0",
     "eslint": "8.26.0",
     "eslint-config-next": "13.0.0",

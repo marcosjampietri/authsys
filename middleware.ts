@@ -61,7 +61,7 @@ export async function middleware(req: NextRequest, event: NextFetchEvent) {
 
         const dbUser: user = await res.json();
 
-        console.log("usuário recuperado", dbUser);
+        // console.log("usuário recuperado", dbUser);
 
         const subscription = await dbUser.stripe.subscriptions.find(
           ({ name }) => `/paid/product/${name}/` == req.nextUrl.pathname

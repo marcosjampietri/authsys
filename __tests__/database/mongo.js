@@ -1,12 +1,13 @@
 const { connect } = require("mongoose");
+require("dotenv").config();
 
-const uri = process.env.DATABASE;
+const uri = process.env["DATABASE"];
 
 const connectToMongo = async () => {
-    // 4. Connect to MongoDB
-    await connect(uri);
+  // 4. Connect to MongoDB
+  await connect(uri);
 
-    console.log("connected to MongoDB using mongoose 6... yaayy"); // 'bill@initech.com'
+  console.log("connected to MongoDB using mongoose 6... yaayy"); // 'bill@initech.com'
 };
 
-module.exports = connectToMongo;
+module.exports = { connectToMongo, uri };

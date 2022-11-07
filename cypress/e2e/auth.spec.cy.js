@@ -27,7 +27,7 @@ it("runs auth flow for successful login to protected reservations page", () => {
 
   cy.get("form").contains("LOGIN").click();
 
-  cy.get("h1").contains("PROTECTED").should("exist");
+  cy.get("h1", { timeout: 7000 }).contains("PROTECTED").should("exist");
 });
 
 //     // check for purchase button and band name
@@ -102,23 +102,9 @@ it("runs auth flow for successful login to protected reservations page", () => {
 it("redirects to sign-in for protected pages", () => {
   cy.fixture("protected-pages.json").then((urls) => {
     urls.forEach(($url) => {
-      cy.visit($url);
+      cy.visit($url, { timeout: 7000 });
       cy.get('input[type="email"]').should("exist");
       cy.get('input[type="password"]').should("exist");
     });
   });
 });
-
-// it("does not show sign-in page when already signed in", () => {
-//   // cy.task("db:reset").signIn(
-//   cy.login(Cypress.env("TEST_USER_EMAIL"), Cypress.env("TEST_PASSWORD"));
-
-//   // access tickets page for first show
-//   cy.visit("/paid");
-
-//   // make sure there's no sign-in page
-//   //   cy.get("div").contains("I DONT HAVE AN ACCOUNT").should("not.exist");
-
-//   // make sure ticket purchase button shows
-//   cy.get("h1").contains("PAID CONTENT").should("exist");
-// });
