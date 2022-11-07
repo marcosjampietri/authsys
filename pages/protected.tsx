@@ -17,6 +17,7 @@ const Home: NextPage = () => {
         <h1>PROTECTED</h1>
         <Items>
           <Link href="/"> Home</Link>
+          <Link href="/course"> FREE Content</Link>
           <Link href="/paid"> Paid Content</Link>
         </Items>
       </Main>

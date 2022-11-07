@@ -12,6 +12,7 @@ import mod from "./modSlicer";
 import toggle from "./toggleSlicer";
 import subscription from "./subscriptionSlice";
 import load from "./loadSlice";
+import course from "./courseSlicer";
 
 const combinedReducer = combineReducers({
   users,
@@ -21,6 +22,7 @@ const combinedReducer = combineReducers({
   toggle,
   subscription,
   load,
+  course,
 });
 
 const masterReducer = (state: any, action: any) => {

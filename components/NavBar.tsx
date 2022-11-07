@@ -42,13 +42,15 @@ const Section = styled.div`
   position: fixed;
   z-index: 5;
 
+  pointer-events: none;
+
   display: flex;
   justify-content: end;
   /* align-items: center; */
 
   div {
     padding: 10px;
-
+    pointer-events: all;
     cursor: pointer;
     background: hsla(0, 0%, 0%, 0.3);
     /* border: 1px solid red; */
