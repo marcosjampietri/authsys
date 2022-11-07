@@ -107,6 +107,7 @@ export const config = {
     "/protected/:path*",
     "/login/:path*",
     "/payment/:path*",
+    "/course/:path*",
     "/paid/:path*",
   ],
 };
