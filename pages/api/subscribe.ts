@@ -36,19 +36,20 @@ export default async function subscribe(
         payment_method: paymentMethod,
         invoice_settings: { default_payment_method: paymentMethod },
       });
+      // Save Stripe customer Id on DB
       await user.findByIdAndUpdate(
         id,
         {
           $set: {
             stripe: {
               id: customer.id,
-              // subscriptions: [{ name: "", access: "" }],
             },
           },
         },
         { new: true }
       );
     } else {
+      // Retrieve a customer in case it exists
       customer = await stripe.customers.retrieve(User.stripe.id);
     }
 

@@ -3,9 +3,9 @@ it("displays correct heading when navigating to shows route", () => {
   cy.get("h1");
 });
 
-it("displays correct product name for product route that existed at build time", () => {
+it(" doesnt display product route for unpaid customer", () => {
   cy.visit("/paid/product/prod_MgsGOzGRz8ylF6/");
-  cy.get("span", { name: /nice subscription/i }).should("exist");
+  cy.get("span", { name: /nice subscription/i }).should("not.exist");
 });
 
 export {};
